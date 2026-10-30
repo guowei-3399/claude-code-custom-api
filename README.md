@@ -1,10 +1,20 @@
 # Claude Code Custom API
 
-[English](#english) | [中文](#中文)
+<p align="center">
+  <img src="docs/images/hero.svg" alt="Claude Code Custom API" width="800">
+</p>
+
+<p align="center">
+  <a href="#english">English</a> | <a href="#中文">中文</a>
+</p>
 
 ---
 
 ## English
+
+<p align="center">
+  <img src="docs/images/screenshot.svg" alt="Screenshot" width="600">
+</p>
 
 A cross-platform desktop launcher for Claude Code with custom API gateway support, proxy configuration, and smart model routing.
 
