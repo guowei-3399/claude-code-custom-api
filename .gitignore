@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output
+dist/
+build/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Config (may contain API keys)
+config.json
+*.local
+
+# Generated icons (keep only source SVG)
+resources/icons/icon-*.png
+resources/icons/icon.png
+resources/icons/icon.ico
+resources/icons/icon.icns
+resources/icons/*.iconset/
+
+# Electron
+out/

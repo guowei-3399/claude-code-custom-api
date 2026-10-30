@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code Launcher</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .nav-item {
+      padding: 12px 15px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .nav-item:hover {
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .nav-item.active {
+      background: #667eea;
+      color: white;
+    }
+
+    .content {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      color: #667eea;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .card h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .form-group input[type="password"] {
+      font-family: monospace;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: auto;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+      margin-left: 10px;
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+
+    .btn-success {
+      background: #10b981;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-left: 10px;
+    }
+
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status.info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .quick-action {
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      text-align: center;
+    }
+
+    .quick-action:hover {
+      transform: translateY(-4px);
+    }
+
+    .quick-action .icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .quick-action .title {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .info-box {
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #667eea;
+    }
+
+    .info-box p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 12px;
+    }
+
+    .footer a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="logo">⚡ Claude</div>
+      <div class="nav-item active" data-page="home">Home</div>
+      <div class="nav-item" data-page="settings">Settings</div>
+      <div class="nav-item" data-page="about">About</div>
+    </div>
+
+    <div class="content">
+      <!-- Home Page -->
+      <div id="page-home" class="page">
+        <div class="card">
+          <h2>Quick Launch</h2>
+          <div class="info-box">
+            <p><strong>Claude Version:</strong> <span id="claude-version">Loading...</span></p>
+            <p><strong>API Provider:</strong> <span id="api-provider">-</span></p>
+            <p><strong>Proxy:</strong> <span id="proxy-status">-</span></p>
+          </div>
+
+          <div class="form-group">
+            <label>Your Question or Command</label>
+            <input type="text" id="prompt-input" placeholder='e.g., "Help me debug this code"'>
+          </div>
+
+          <div class="form-group">
+            <label>Model</label>
+            <select id="model-select">
+              <option value="claude-opus-5-5">Opus 5.5 (Recommended)</option>
+              <option value="claude-sonnet-5-5">Sonnet 5.5</option>
+              <option value="claude-haiku-5-5">Haiku 5.5</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Thinking Effort</label>
+            <select id="effort-select">
+              <option value="low">Low - Fastest</option>
+              <option value="medium" selected>Medium - Balanced</option>
+              <option value="high">High - Thorough</option>
+              <option value="xhigh">Extra High - Most thorough</option>
+              <option value="max">Max - Maximum reasoning</option>
+            </select>
+          </div>
+
+          <button class="btn-primary" onclick="launchClaude()">🚀 Launch Claude Code</button>
+        </div>
+
+        <div class="card">
+          <h3>Quick Actions</h3>
+          <div class="quick-actions">
+            <div class="quick-action" onclick="quickLaunch('')">
+              <div class="icon">💬</div>
+              <div class="title">New Chat</div>
+            </div>
+            <div class="quick-action" onclick="quickLaunch('--print')">
+              <div class="icon">📄</div>
+              <div class="title">Print Mode</div>
+            </div>
+            <div class="quick-action" onclick="quickLaunch('attach')">
+              <div class="icon">🔗</div>
+              <div class="title">Attach Session</div>
+            </div>
+            <div class="quick-action" onclick="testConnections()">
+              <div class="icon">🔍</div>
+              <div class="title">Test Connection</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Page -->
+      <div id="page-settings" class="page hidden">
+        <div class="card">
+          <h2>Settings</h2>
+
+          <h3>API Provider</h3>
+          <div class="form-group">
+            <label>Provider</label>
+            <select id="api-provider-select" onchange="toggleCustomAPI()">
+              <option value="anthropic">Anthropic Official</option>
+              <option value="custom">Custom Gateway</option>
+            </select>
+          </div>
+
+          <div id="custom-api-fields" class="hidden">
+            <div class="form-group">
+              <label>Custom API Base URL</label>
+              <input type="text" id="custom-api-base" placeholder="https://api.example.com">
+            </div>
+
+            <div class="form-group">
+              <label>API Key</label>
+              <input type="password" id="api-key" placeholder="sk-ant-...">
+            </div>
+
+            <button class="btn-secondary" onclick="testAPIConnection()">Test API Connection</button>
+            <span id="api-test-result"></span>
+          </div>
+
+          <h3>Proxy Configuration</h3>
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="proxy-enabled" onchange="toggleProxy()">
+            <label for="proxy-enabled">Enable Proxy</label>
+          </div>
+
+          <div id="proxy-fields" class="hidden">
+            <div class="form-group">
+              <label>Proxy URL</label>
+              <input type="text" id="proxy-url" placeholder="http://127.0.0.1:7890">
+            </div>
+
+            <button class="btn-secondary" onclick="testProxyConnection()">Test Proxy</button>
+            <span id="proxy-test-result"></span>
+          </div>
+
+          <h3>Default Settings</h3>
+          <div class="form-group">
+            <label>Default Model</label>
+            <select id="default-model">
+              <option value="claude-opus-5-5">Opus 5.5</option>
+              <option value="claude-sonnet-5-5">Sonnet 5.5</option>
+              <option value="claude-haiku-5-5">Haiku 5.5</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Default Effort</label>
+            <select id="default-effort">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+              <option value="xhigh">Extra High</option>
+              <option value="max">Max</option>
+            </select>
+          </div>
+
+          <h3>Subscription Cache</h3>
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="cache-enabled" checked>
+            <label for="cache-enabled">Enable subscription status caching (reduces API calls)</label>
+          </div>
+
+          <button class="btn-success" onclick="saveSettings()">💾 Save Settings</button>
+          <button class="btn-secondary" onclick="exportConfig()">Export Config</button>
+          <button class="btn-secondary" onclick="importConfig()">Import Config</button>
+        </div>
+      </div>
+
+      <!-- About Page -->
+      <div id="page-about" class="page hidden">
+        <div class="card">
+          <h2>About Claude Code Launcher</h2>
+          <p style="margin-bottom: 15px;">A cross-platform desktop launcher for Claude Code with enhanced proxy support and API management.</p>
+
+          <h3>Features</h3>
+          <ul style="margin-left: 20px; margin-bottom: 20px;">
+            <li>One-click launch with pre-configured settings</li>
+            <li>Smart API fallback</li>
+            <li>Proxy support for restricted networks</li>
+            <li>Model and effort level control</li>
+            <li>Subscription status caching</li>
+          </ul>
+
+          <h3>Version</h3>
+          <p style="margin-bottom: 20px;">1.0.0</p>
+
+          <h3>Links</h3>
+          <p>
+            <a href="#" onclick="openExternal('https://github.com/your-org/claude-launcher')">GitHub Repository</a> •
+            <a href="#" onclick="openExternal('https://claude.ai/code')">Claude Code</a> •
+            <a href="#" onclick="openExternal('https://docs.anthropic.com')">Documentation</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="footer">
+        Made with ❤️ for the Claude Code community
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{
+  "name": "claude-code-launcher",
+  "version": "1.0.0",
+  "description": "Cross-platform desktop launcher for Claude Code with proxy support and API fallback",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "electron .",
+    "build": "electron-builder --dir",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "package": "electron-builder --win --mac --linux",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "ai",
+    "launcher",
+    "proxy",
+    "electron"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/claude-launcher.git"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "electron": "^32.3.3",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.yourorg.claude-launcher",
+    "productName": "Claude Launcher",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "scripts/**/*",
+      "resources/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "scripts",
+        "to": "scripts",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "resources/icons/icon.ico"
+    },
+    "mac": {
+      "target": ["dmg"],
+      "icon": "resources/icons/icon.icns",
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "resources/icons/icon.png",
+      "category": "Development"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
